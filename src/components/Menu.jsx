@@ -6,14 +6,21 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap';
 
 const Menu = () => {
+  // Reference to content container (used for potential future effects or logic)
   const contentRef = useRef();
+  // State to track which cocktail is currently displayed
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Animate content whenever currentindex changes
   useGSAP(() => {
+    // Animate recipe title fade in
     gsap.fromTo('#title', { opacity: 0 }, { opacity: 1, duration: 1 });
+
+    // Animate cocktail image sliding in from the left
     gsap.fromTo('.cocktail img', { opacity: 0, xPercent: -100 }, {
       xPercent: 0, opacity: 1, duration: 1, ease: 'power1.inOut'
     })
+    // Animate recipe title and description sliding in from the bottom
     gsap.fromTo('.details h2', { yPercent: 100, opacity: 0 }, {
       yPercent: 0, opacity: 100, ease: 'power1.inOut'
     })
@@ -24,16 +31,18 @@ const Menu = () => {
 
   const totalCocktails = sliderLists.length;
 
+  // Handles switching to a specific cocktail by index
   const goToSlide = (index) => {
-    const newIndex = (index + totalCocktails) % totalCocktails;
+    const newIndex = (index + totalCocktails) % totalCocktails;  // Wrap around the index
 
     setCurrentIndex(newIndex);
   }
-
+  // Utility to get a cocktail relative to the current index
   const getCocktailAt = (indexOffset) => {
     return sliderLists[(currentIndex + indexOffset + totalCocktails) % totalCocktails]
   }
 
+  // Get data for cuurent, previous, and next cocktails
   const currentCocktail = getCocktailAt(0);
   const prevCocktail = getCocktailAt(-1);
   const nextCocktail = getCocktailAt(1);
@@ -42,11 +51,11 @@ const Menu = () => {
     <section id="menu" aria-labelledby="menu-heading">
       <img src="/images/slider-left-leaf.png" alt="left-leaf" id="m-left-leaf" />
       <img src="/images/slider-right-leaf.png" alt="right-leaf" id="m-right-leaf" />
-
+      {/* Screen-reader heading for accessibility */}
       <h2 id="menu-heading" className="sr-only">
         Cocktail Menu
       </h2>
-
+      {/* Cocktail tab navigation */}
       <nav className="cocktail-tabs" aria-label="Cocktail Navigation">
         {sliderLists.map((cocktail, index) => {
           const isActive = index === currentIndex;
@@ -65,6 +74,7 @@ const Menu = () => {
       </nav>
 
       <div className="content">
+        {/* Navigation arrows to go to previous/next cocktail */}
         <div className="arrows">
           <button className="text-left" onClick={() => goToSlide(currentIndex - 1)}>
             <span>{prevCocktail.name}</span>
@@ -81,6 +91,7 @@ const Menu = () => {
           <img src={currentCocktail.image} className="object-contain"/>
         </div>
 
+        {/* Cocktail details and recipe description */}
         <div className="recipe">
           <div ref={contentRef} className="info">
             <p>Recipe for:</p>

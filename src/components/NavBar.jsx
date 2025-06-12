@@ -6,17 +6,19 @@ import {navLinks } from '../../constants/index.js'
 
 
 const NavBar = () => {
+  // Animate navbar when scrolling past it
   useGSAP(() => {
     const navTween = gsap.timeline({
       scrollTrigger: {
-        trigger: 'nav',
-        start: 'bottom top'
+        trigger: 'nav',           // Start animation when the <nav> element hits the top of the viewport
+        start: 'bottom top'       // When the bottom of nav hits the top of the screen
       }
     });
 
+    // Fade in a blurred background on scroll
     navTween.fromTo('nav', {backgroundColor: 'transparent'}, {
-      backgroundColor: '#00000050',
-        backgroundFilter: 'blur(10px',
+      backgroundColor: '#00000050',         // Semi-transparent black
+        backgroundFilter: 'blur(10px',      // Subtle blue effect
         duration: 1,
         ease: 'power1.inOut'
     });
@@ -29,7 +31,7 @@ const NavBar = () => {
           <img src="/images/logo.png" alt="logo" />
           <p>Velvet Pour</p>
         </a>
-
+        {/** navigation links generated from constants*/}
         <ul>
           {navLinks.map((link) => (
             <li key={link.id}>
